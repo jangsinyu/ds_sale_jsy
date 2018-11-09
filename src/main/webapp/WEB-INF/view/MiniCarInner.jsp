@@ -14,6 +14,9 @@
         function toItemPage(skuId,shpId) {
             location.href="toItemPage.do?skuId="+skuId+"&spuId="+shpId;
         }
+        function toShoppingCarPage() {
+            location.href="toShoppingCarPage.do";
+        }
     </script>
 </head>
 <body>
@@ -33,8 +36,8 @@
 
     <div class="gobottom">
         共<span>${countSum}</span>件商品&nbsp;&nbsp;&nbsp;&nbsp;
-        共计￥<span>${hj}</span>
-        <button class="goprice">去购物车</button>
+        共计￥<span>${hjSum}</span>
+        <button class="goprice" onclick="toShoppingCarPage()">去购物车</button>
     </div>
 
 </body>

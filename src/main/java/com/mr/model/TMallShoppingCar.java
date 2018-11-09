@@ -1,8 +1,9 @@
 package com.mr.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TMallShoppingcar {
+public class TMallShoppingCar implements Serializable {
     private Integer id;
     //sku名称
     private String skuMch;

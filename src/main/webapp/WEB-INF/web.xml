@@ -12,7 +12,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:spring-base.xml,
-            classpath:spring-common.xml
+            classpath:spring-common.xml,
+            classpath:spring-redis.xml
         </param-value>
     </context-param>
 

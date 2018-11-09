@@ -1,17 +1,25 @@
 package com.mr.controller;
 
+import com.mr.model.TMallShoppingCar;
 import com.mr.model.TMallUserAccount;
+import com.mr.service.CarService;
 import com.mr.service.LoginService;
 import com.mr.util.MyCookieUtils;
-import com.sun.net.httpserver.HttpsConfigurator;
+import com.mr.util.MyJsonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JangSinyu on 2018/11/5.
@@ -21,6 +29,12 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private CarService carService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 跳转登录页面
@@ -39,9 +53,8 @@ public class LoginController {
      */
     @RequestMapping("checkUserAndPswd")
     public String checkUserAndPswd(String userName, String password,
-                                   HttpSession session,
-                                   HttpServletRequest request,
-                                   HttpServletResponse response){
+                       HttpSession session, HttpServletRequest request, HttpServletResponse response,
+                       @CookieValue(value = "cookieCarList" ,required = false) String cookieCarList){
         TMallUserAccount user = loginService.checkUserAndPswd(userName, password);
         if (null == user){//查询用户为空，登录失败
             return "redirect:toLoginPage.do";
@@ -49,6 +62,36 @@ public class LoginController {
             session.setAttribute("user", user);
             String yhMch = user.getYhMch();
             MyCookieUtils.setCookie(request, response, "yhMch", yhMch, 24*60*60, true);
+
+            if(!StringUtils.isEmpty(cookieCarList)){
+                //获取cookie中的值
+                List<TMallShoppingCar> carListCookie = MyJsonUtil.jsonToList(cookieCarList, TMallShoppingCar.class);
+                //获得数据库中的数据
+                //List<TMallShoppingCar> carListDB = carService.getCarListByUserId(user.getId());
+
+                //循环判断商品是否存在
+                for (int i = 0; i < carListCookie.size(); i++) {
+
+                    //取数据库查询
+                    TMallShoppingCar car =
+                            carService.getCarByUserIdAndSkuId(carListCookie.get(i).getSkuId(),user.getId());
+                    if(car != null){//存在
+                        //修改添加数量
+                        car.setTjshl(car.getTjshl()+carListCookie.get(i).getTjshl());
+                        //修改合计
+                        car.setHj(CarController.getHj(car));
+                        //修改数据库数据
+                        carService.updateCarByUser(car);
+                    }else{//不存在，直接添加
+                        Map<String, Object> paramMap = new HashMap<String, Object>();
+                        paramMap.put("userId",user.getId());
+                        paramMap.put("car",carListCookie.get(i));
+                        carService.saveCarToDateBase(paramMap);
+                    }
+                }
+                redisTemplate.delete("redisCartListUser"+user.getId());
+            }
+            MyCookieUtils.deleteCookie(request,response,cookieCarList);
             return "redirect:toMainPage.do";
         }
     }

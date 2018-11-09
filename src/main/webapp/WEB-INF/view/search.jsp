@@ -17,15 +17,9 @@
             })
             $("#MiniCarInner").show();
         }
-
-
         function outMiniCar() {
-
             $("#MiniCarInner").hide();
-
         }
-
-
     </script>
 </head>
 <body>
@@ -48,15 +42,11 @@
             </div>
         </div>
         <div class="card" onmouseover="findMiniCar()" onmouseout="outMiniCar()">
-            <a href="">购物车<div class="num">0</div></a>
+            <a href="toShoppingCarPage.do">购物车<div class="num" id="numDiv">0</div></a>
             <!--购物车商品-->
             <div class="cart_pro">
-
-
                 <!--    内嵌的mini购物车div   -->
                 <div id="MiniCarInner" style="display: none"></div>
-
-
             </div>
         </div>
     </div>

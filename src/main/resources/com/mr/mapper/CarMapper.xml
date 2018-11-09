@@ -4,18 +4,56 @@
 <mapper namespace="com.mr.mapper.CarMapper">
 
 
-    <select id="getCarListBySkuIdAndUserId" resultType="list" parameterType="int">
+    <select id="getCarListByUserId" resultType="com.mr.model.TMallShoppingCar" parameterType="int">
         select * from t_mall_shoppingcar
         where
             yh_id = #{userId}
     </select>
 
 
-    <select id="getCarBySkuIdAndUserId" parameterType="int" resultType="com.mr.model.TMallShoppingcar">
+    <select id="getCarByUserIdAndSkuId" parameterType="int" resultType="com.mr.model.TMallShoppingCar">
         select * from t_mall_shoppingcar
         where
             sku_id = #{skuId}
         and
             yh_id = #{userId}
     </select>
+
+    <update id="updateCarListBySkuIdAndUserId" parameterType="map">
+        update t_mall_shoppingcar set
+            tjshl = #{tjshl},
+            hj = #{hj}
+        where
+            yh_id = #{userId}
+        and
+            sku_id = #{skuId}
+    </update>
+
+
+    <insert id="saveCarToDateBase" parameterType="map">
+        insert into t_mall_shoppingcar
+            (sku_mch,sku_jg,tjshl,hj,yh_id,shp_id,sku_id,shp_tp,shfxz,kcdz)
+        values
+            (#{car.skuMch},#{car.skuJg},#{car.tjshl},#{car.hj},#{userId},#{car.shpId},#{car.skuId},#{car.shpTp},#{car.shfxz},#{car.kcdz})
+    </insert>
+
+    <update id="updateCarSfxzBySkuIdAndUserId" parameterType="map">
+        update t_mall_shoppingcar set
+            shfxz = #{shfxz}
+        where
+            yh_id = #{userId}
+        and
+            sku_id = #{skuId}
+    </update>
+
+    <update id="updateCarByUser" parameterType="com.mr.model.TMallShoppingCar">
+        update t_mall_shoppingcar set
+            tjshl = #{tjshl},hj = #{hj}
+        where
+            yh_id = #{yhId}
+          and
+            sku_id = #{skuId}
+    </update>
+
+
 </mapper>
