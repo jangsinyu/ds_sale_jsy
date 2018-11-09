@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mr.mapper.UserMapper">
+    
+    <select id="checkUserAndPswd" resultType="tMallUserAccount">
+        SELECT * FROM t_mall_user_account
+        WHERE
+        yh_mch = #{userName}
+        AND
+        yh_mm = #{password}
+    </select>
+    
+    <select id="checkYhMch" resultType="tMallUserAccount">
+        SELECT * FROM t_mall_user_account
+        WHERE
+        yh_mch = #{userName}
+    </select>
+    
+    <insert id="saveUser" parameterType="tMallUserAccount">
+        INSERT INTO t_mall_user_account
+            (yh_mch,yh_mm,yh_shjh,yh_yx)
+        VALUES
+            (#{yhMch},#{yhMm},#{yhShjh},#{yhYx})
+    </insert>
+    
+</mapper>
