@@ -151,7 +151,7 @@ public class CarController {
                 redisTemplate.opsForValue().set("redisCartListUser"+user.getId(),carList);
             }
         }
-        // TODO: 2018/11/9    此处有Bug 当carList为空时，会报空指针异常
+        // TODO: 2018/11/9    此处有Bug 当carList为空时，会报空指针异常  上面创建carList新建不出来
         Integer countSum = 0;
         for (int i = 0; i < carList.size(); i++) {
             countSum += carList.get(i).getTjshl();
@@ -206,7 +206,7 @@ public class CarController {
      * @return
      */
     @RequestMapping("changeState")
-    public String changeState(String shfxz,String skuId,HttpSession session,ModelMap map,
+    public String changeState(String shfxz,int skuId,HttpSession session,ModelMap map,
                               @CookieValue(value = "cookieCarList" ,required = false) String cookieCarList,
                               HttpServletResponse response,HttpServletRequest request){
         //判断用户是否登录
@@ -216,17 +216,17 @@ public class CarController {
         if(user == null){//用户未登录
             carList = MyJsonUtil.jsonToList(cookieCarList, TMallShoppingCar.class);
             for (int i = 0; i < carList.size(); i++) {
-                if (carList.get(i).getSkuId() == Integer.parseInt(skuId)){
+                if (carList.get(i).getSkuId() == skuId){
                     carList.get(i).setShfxz(shfxz);
                 }
             }
-            MyCookieUtils.setCookie(request,response,"carList",MyJsonUtil.objectToJson(carList),3*24*60*60,true);
+            MyCookieUtils.setCookie(request,response,"cookieCarList",MyJsonUtil.objectToJson(carList),3*24*60*60,true);
         }else{
             //查询redis中数据，判断是否为空
             carList = (List<TMallShoppingCar>) redisTemplate.opsForValue().get("redisCartListUser"+user.getId());
-            carService.updateCarSfxzBySkuIdAndUserId(shfxz,Integer.parseInt(skuId),user.getId());
+            carService.updateCarSfxzBySkuIdAndUserId(shfxz,skuId,user.getId());
             for (int i = 0; i < carList.size(); i++) {
-                if (carList.get(i).getSkuId() == Integer.parseInt(skuId)){
+                if (carList.get(i).getSkuId() == skuId){
                     carList.get(i).setShfxz(shfxz);
                 }
             }
@@ -239,7 +239,7 @@ public class CarController {
 
 
     //计算总价格
-    public BigDecimal getSum(List<TMallShoppingCar> carList){
+    public static BigDecimal getSum(List<TMallShoppingCar> carList){
         BigDecimal sum = new BigDecimal("0");
         for (int i = 0; i < carList.size(); i++) {
             if(carList.get(i).getShfxz().equals("1")){

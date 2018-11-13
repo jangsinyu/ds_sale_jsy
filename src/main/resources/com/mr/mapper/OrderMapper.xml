@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mr.mapper.OrderMapper">
+
+    <select id="getAddrList" parameterType="int" resultType="com.mr.model.TMallAddress">
+        select * from t_mall_address where yh_id = #{userId}
+    </select>
+
+    <insert id="saveOrder" parameterType="com.mr.model.TMallOrderVO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO `t_mall_order` (
+            `zje`,
+            `jdh`,
+            `yh_id`,
+            `yjsdshj`,
+            `dzh_id`,
+            `shhr`,
+            `dzh_mch`
+        )
+        VALUES
+        (
+             #{zje},
+             #{jdh},
+             #{yhId},
+             #{yjsdshj},
+             #{dzhId},
+             #{shhr},
+             #{dzhMch}
+        )
+    </insert>
+
+    <insert id="saveFlow" parameterType="map" useGeneratedKeys="true" keyProperty="flowVO.id" keyColumn="id">
+        INSERT INTO `t_mall_flow` (
+            `psfsh`,
+            `psshj`,
+            `psmsh`,
+            `yh_id`,
+            `dd_id`,
+            `mqdd`
+        )
+        VALUES
+            (
+                #{flowVO.psfsh},
+                #{flowVO.psshj},
+                #{flowVO.psmsh},
+                #{flowVO.yhId},
+                #{orderId},
+                #{flowVO.mqdd}
+            )
+    </insert>
+
+    <insert id="saveOrderInfo" parameterType="map">
+        INSERT INTO `t_mall_order_info` (
+            `flow_id`,
+            `sku_jg`,
+            `sku_shl`,
+            `sku_kcdz`,
+            `gwch_id`,
+            `dd_id`,
+            `sku_id`,
+            `sku_mch`,
+            `shp_tp`
+        )
+        VALUES
+            <foreach collection="orderInfoList" item="orderInfo" separator=",">
+                (#{flowId},#{orderInfo.skuJg},#{orderInfo.skuShl},#{orderInfo.skuKcdz},#{orderInfo.gwchId},#{orderId},#{orderInfo.skuId},#{orderInfo.skuMch},#{orderInfo.shpTp})
+            </foreach>
+    </insert>
+
+
+    <delete id="deleteCarByCarIds" parameterType="list">
+        delete from t_mall_shoppingcar where Id in
+        <foreach collection="idsList" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

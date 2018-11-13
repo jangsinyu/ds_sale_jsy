@@ -41,6 +41,7 @@
             </div>
             <div class="blank_01"></div>
             <form action="/checkUserAndPswd.do" id="login_form" method="post">
+                <input type="hidden" name="loginUrl" value="${loginUrl}">
                 <div class="input1">
                     <input type="text" class="input1_01" placeholder="请输入用户名" name="userName"/>
                 </div>

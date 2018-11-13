@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +42,10 @@ public class LoginController {
      * @return
      */
     @RequestMapping("toLoginPage")
-    public String toLoginPage(){
+    public String toLoginPage(String loginUrl, ModelMap map){
+        if(!StringUtils.isBlank(loginUrl)){
+            map.put("loginUrl",loginUrl);
+        }
         return "login";
     }
 
@@ -52,7 +56,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping("checkUserAndPswd")
-    public String checkUserAndPswd(String userName, String password,
+    public String checkUserAndPswd(String userName, String password,String loginUrl,
                        HttpSession session, HttpServletRequest request, HttpServletResponse response,
                        @CookieValue(value = "cookieCarList" ,required = false) String cookieCarList){
         TMallUserAccount user = loginService.checkUserAndPswd(userName, password);
@@ -91,7 +95,10 @@ public class LoginController {
                 }
                 redisTemplate.delete("redisCartListUser"+user.getId());
             }
-            MyCookieUtils.deleteCookie(request,response,cookieCarList);
+            MyCookieUtils.deleteCookie(request,response,"cookieCarList");
+            if(!StringUtils.isBlank(loginUrl)){
+                return "redirect:"+loginUrl+".do";
+            }
             return "redirect:toMainPage.do";
         }
     }
