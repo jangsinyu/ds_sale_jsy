@@ -1,9 +1,7 @@
 package com.mr.service.impl;
 
 import com.mr.mapper.OrderMapper;
-import com.mr.model.TMallAddress;
-import com.mr.model.TMallFlowVO;
-import com.mr.model.TMallOrderVO;
+import com.mr.model.*;
 import com.mr.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +49,19 @@ public class OrderServiceImpl implements OrderService {
 
     public void deleteCarByCarIds(List<Integer> idsList) {
         orderMapper.deleteCarByCarIds(idsList);
+    }
+
+    public void updateSku(List<TMallShoppingCar> carList) {
+        for (int i = 0; i < carList.size(); i++) {
+            TMallShoppingCar car = carList.get(i);
+            //根据 skuid 查询出sku
+            TMallSku sku = orderMapper.getSkuById(car.getSkuId());
+            //修改sku销量， 库存
+            sku.setKc(sku.getKc() - car.getTjshl());
+            Integer tjshl = car.getTjshl();
+            Integer skuXl = sku.getSkuXl();
+            sku.setSkuXl(skuXl + tjshl);
+            orderMapper.updateSku(sku);
+        }
     }
 }

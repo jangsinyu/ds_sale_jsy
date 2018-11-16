@@ -26,7 +26,8 @@
         and
         attr.flbh2 = #{flbh2}
     </select>
-    <resultMap id="getAttrListByClass2Map" type="oBJECGTMallAttr" autoMapping="true">
+
+    <resultMap id="getAttrListByClass2Map" type="com.mr.model.OBJECGTMallAttr" autoMapping="true">
         <id property="id" column="attr_id" ></id>
         <collection property="valueList" ofType="tMallValue" autoMapping="true">
             <id property="id" column="val_id"></id>
@@ -70,6 +71,11 @@
                 </where>
             </if>
         )
+    </select>
+
+
+    <select id="getFlbh2ByShpId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT flbh2 FROM t_mall_product where id = #{shpId}
     </select>
 
 

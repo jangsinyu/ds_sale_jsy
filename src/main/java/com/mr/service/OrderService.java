@@ -2,6 +2,7 @@ package com.mr.service;
 
 import com.mr.model.TMallAddress;
 import com.mr.model.TMallOrderVO;
+import com.mr.model.TMallShoppingCar;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface OrderService {
     void saveOrder(TMallOrderVO orderVO);
 
     void deleteCarByCarIds(List<Integer> idsList);
+
+    void updateSku(List<TMallShoppingCar> carList);
 }

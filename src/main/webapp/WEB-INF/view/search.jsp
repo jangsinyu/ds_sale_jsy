@@ -24,15 +24,17 @@
 </head>
 <body>
     <div class="search">
-        <div class="logo">
+       <div class="logo">
             <a href="/toMainPage.do">
                 <img src="./images/logo.jpg" alt="">
             </a>
         </div>
         <div class="search_on">
             <div class="se">
-                <input type="text" name="search" class="lf">
-                <input type="submit" class="clik" value="搜索">
+                <form action="getSkuListByKey.do" method="get">
+                    <input type="text" id="skuMch" name="skuMch" class="lf">
+                    <input type="submit" class="clik" value="搜索">
+                </form>
             </div>
             <div class="se">
                 <a href="">取暖神奇</a>

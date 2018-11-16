@@ -34,6 +34,8 @@ public class CarController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+
+
     /**
      *  添加商品到购物车
      *
@@ -48,6 +50,9 @@ public class CarController {
     public String saveToShoppingCar(TMallShoppingCar car, HttpSession session,
                                     @CookieValue(value = "cookieCarList" ,required = false) String cookieCarList,
                                     HttpServletRequest request, HttpServletResponse response, ModelMap returnMap) {
+
+
+
         //计算合计价格
         car.setHj(getHj(car));
         //定义List集合
@@ -164,7 +169,6 @@ public class CarController {
     }
 
 
-
     /**
      * 跳转至购物车页面
      * @return
@@ -188,8 +192,10 @@ public class CarController {
         }
         // TODO: 2018/11/9   此处有Bug 当carList为空时，会报空指针异常
         Integer countSum = 0;
-        for (int i = 0; i < carList.size(); i++) {
-            countSum += carList.get(i).getTjshl();
+        if (carList.size() != 0 || null != carList) {
+            for (int i = 0; i < carList.size(); i++) {
+                countSum += carList.get(i).getTjshl();
+            }
         }
         //返回的数据
         map.put("carList",carList);

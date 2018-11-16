@@ -21,4 +21,5 @@ public interface CarService {
     TMallShoppingCar getCarByUserIdAndSkuId(Integer skuId, Integer userId);
 
     void updateCarByUser(TMallShoppingCar car);
+
 }

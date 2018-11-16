@@ -10,6 +10,16 @@
 <html>
 <head>
     <title>Title</title>
+    <script src="/js/jquery-1.11.3.min.js"></script>
+    <script>
+        function toCheckOrderPage(hjSum) {
+            if(hjSum == 0){
+                alert("请选择商品");
+            } else {
+                location.href="toCheckOrderPage.do";
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="Cbox">
@@ -47,7 +57,7 @@
 </div>
 <div class="Cprice">
     <div class="price">${hjSum}</div>
-    <a href="toCheckOrderPage.do">
+    <a href="javascript:toCheckOrderPage(${hjSum})">
         <div class="jiesuan">结算</div>
     </a>
 </div>

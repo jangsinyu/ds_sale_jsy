@@ -2,6 +2,7 @@ package com.mr.mapper;
 
 import com.mr.model.TMallAddress;
 import com.mr.model.TMallOrderVO;
+import com.mr.model.TMallSku;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface OrderMapper {
     void saveOrderInfo(Map<String, Object> map);
 
     void deleteCarByCarIds(@Param("idsList") List<Integer> idsList);
+
+    void updateSku(TMallSku sku);
+
+    TMallSku getSkuById(@Param("skuId") Integer skuId);
 }

@@ -17,12 +17,18 @@
         function chooseAddr(dzMch,shjr,lxfsh,dzhId) {
             var addrStr = "寄送至 ： "+dzMch+"     &nbsp;"+shjr+"（收）  "+lxfsh;
             $(".msg_sub_adds").html(addrStr);
+            $(".msg_sub_adds").val(1);
             $("#dzhId").val(dzhId);
             $("#dzMch").val(dzMch);
             $("#shjr").val(shjr);
         }
         function saveOrder() {
-            $("#saveOrderForm").submit();
+            var a = $(".msg_sub_adds").val();
+            if(a != 1){
+                alert("请选择收件人");
+            }else {
+                $("#saveOrderForm").submit();
+            }
         }
     </script>
 </head>

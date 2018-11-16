@@ -1,6 +1,7 @@
 package com.mr.controller;
 
 import com.mr.model.*;
+import com.mr.service.CarService;
 import com.mr.service.OrderService;
 import com.mr.util.MyDateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private CarService carService;
 
 
     @RequestMapping("toCheckOrderPage")
@@ -36,8 +39,11 @@ public class OrderController {
 
             //查询选中的sku集合
             List<TMallShoppingCar> carList = (List<TMallShoppingCar>) redisTemplate.opsForValue().get("redisCartListUser"+user.getId());
+            if(carList == null || carList.size() == 0){
+                carList = carService.getCarListByUserId(user.getId());
+            }
 
-            map.put("sum",CarController.getSum(carList));
+            map.put("sum", CarController.getSum(carList));
             map.put("carList",carList);
             map.put("addrList",addrList);
             return "checkOrder";
@@ -127,7 +133,28 @@ public class OrderController {
         orderService.deleteCarByCarIds(idsList);
 
         map.put("sum", CarController.getSum(carList));
+        map.put("carList",carList);
         return "pay";
+    }
+
+
+    /**
+     *      支付成功
+     *      //修改  sku 销量，库存
+     */
+    @RequestMapping("paySuccess")
+    public String paySuccess(TMallCarVO carVO){
+
+        /**
+         * 需要数据 skuid 订单添加sku数量
+         */
+        orderService.updateSku(carVO.getCarList());
+
+
+
+
+        return "";
+
     }
 
 

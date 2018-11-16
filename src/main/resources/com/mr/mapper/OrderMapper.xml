@@ -75,4 +75,12 @@
         </foreach>
     </delete>
 
+    <select id="getSkuById" parameterType="int" resultType="com.mr.model.TMallSku">
+        select * from t_mall_sku where Id = #{skuId}
+    </select>
+
+    <update id="updateSku" parameterType="com.mr.model.TMallSku">
+        update t_mall_sku set kc = #{kc},sku_xl = #{skuXl} where id = #{id}
+    </update>
+
 </mapper>

@@ -47,9 +47,9 @@
             <a><font color="red">${user.yhMch}</font></a>
         </div>
     </c:if>
-    <div class="top_img">
-        <img src="./images/top_img.jpg">
-    </div>
+</div>
+<div class="top_img">
+    <img src="./images/top_img.jpg" alt="">
 </div>
 </body>
 </html>

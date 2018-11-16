@@ -34,4 +34,8 @@ public class ListServiceImpl implements ListService {
         map.put("flbh2",flbh2);
         return listMapper.getSkuByClass2AndType(map);
     }
+
+    public Integer getFlbh2ByShpId(Integer shpId) {
+        return listMapper.getFlbh2ByShpId(shpId);
+    }
 }
